@@ -1,17 +1,13 @@
-HUGO = hugo
-POST_TITLE ?= "New Post"
-POST_NAME ?= "new-post"
-
-.PHONY: all build clean post
-
-all: build
+POST_NAME ?= $(shell cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
+POST_TITLE ?= $(shell cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 16 | head -n 1)
 
 build:
-	$(HUGO) --source=. --destination=./dist/
+	hugo --source=. --destination=./dist
 
 clean:
 	rm -rf ./dist/*
 
 post:
-	$(HUGO) new --kind=post posts/$(POST_NAME).md
-	sed -i 's/title = ""/title = $(POST_TITLE)/' ./content/posts/$(POST_NAME).md
+	hugo new posts/$(POST_NAME).md
+	sed -i 's/title = ""/title = "$(POST_TITLE)"/' ./content/posts/$(POST_NAME).md
+
