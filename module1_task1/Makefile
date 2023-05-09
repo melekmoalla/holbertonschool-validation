@@ -1,13 +1,17 @@
-build: 
-	hugo
+HUGO = hugo
+POST_TITLE ?= "New Post"
+POST_NAME ?= "new-post"
 
-dist/index.html: clean
-	hugo --source=./ --destination=./dist/
-	mv ./dist/index.xml ./dist/index.html
+.PHONY: all build clean post
+
+all: build
+
+build:
+	$(HUGO) --source=. --destination=./dist/
 
 clean:
 	rm -rf ./dist/*
 
 post:
-	hugo new posts/$(POST_NAME).md
-	sed -i 's/title = ""/title = "$(POST_TITLE)"/g' ./content/posts/$(POST_NAME).md
+	$(HUGO) new --kind=post posts/$(POST_NAME).md
+	sed -i 's/title = ""/title = $(POST_TITLE)/' ./content/posts/$(POST_NAME).md
