@@ -9,6 +9,7 @@ clean:
 	rm -rf dist/*
 
 post:
-	hugo new posts/$(POST_NAME).md
-	sed -i '1i---\ntitle: "$(POST_TITLE)"\ndate: $$(date +"%Y-%m-%dT%H:%M:%S%z")\ndraft: true\n---\n' content/posts/$(POST_NAME).md
+	hugo new --kind post content/posts/$(POST_NAME).md
+	sed -i '/title:/c\title: "$(POST_TITLE)"' content/posts/$(POST_NAME).md
+
 
