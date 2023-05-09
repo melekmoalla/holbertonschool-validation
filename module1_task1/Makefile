@@ -1,13 +1,15 @@
-POST_NAME ?= $(shell cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)
-POST_TITLE ?= $(shell cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 16 | head -n 1)
+POST_FILE := $(POST_NAME).md
+POST_PATH := content/posts/$(POST_FILE)
 
 build:
-	hugo --source=. --destination=./dist
+	hugo --source=./ --destination=./dist
 
 clean:
 	rm -rf ./dist/*
 
 post:
-	hugo new posts/$(POST_NAME).md
-	sed -i 's/title = ""/title = "$(POST_TITLE)"/' ./content/posts/$(POST_NAME).md
+	hugo new $(POST_PATH)
+	sed -i 's/title: .*/title: "$(POST_TITLE)"/' $(POST_PATH)
+
+.PHONY: build clean post
 
