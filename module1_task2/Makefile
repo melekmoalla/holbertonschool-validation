@@ -2,8 +2,7 @@
 build:     
 	hugo
 
-# Remove the dist directory
-clean:     
+clean:	# Remove the dist directory
 	rm -rf dist
 
 # Deploy the website
