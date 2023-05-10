@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# This is a basic shell script template
+if [ ! -f "/tmp/installed.txt" ]; then
+  # Update the system
+  apt-get update -y
+  apt-get upgrade -y
 
-# Update the system
-apt-get update -y
-apt-get upgrade -y
+  # Install Hugo
+  apt-get install -y hugo
 
-# Install necessary packages
-apt-get install -y package1 package2 package3
+  # Install Make
+  apt-get install -y make
+
+  # Create a flag file to indicate that hugo and make are installed
+  touch /tmp/installed.txt
+fi
 
 # Generate the website using Hugo
 hugo -v
