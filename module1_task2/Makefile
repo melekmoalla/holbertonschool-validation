@@ -1,14 +1,14 @@
 # Build the website
 build:     
-    hugo
+	hugo
 
 # Remove the dist directory
 clean:     
-    rm -rf dist
+	rm -rf dist
 
 # Deploy the website
 post:     
-    rsync -avz --delete dist/ user@host:/var/www/site
+	rsync -avz --delete dist/ user@host:/var/www/site
 
 # Print out the list of targets and their usage
 help:
