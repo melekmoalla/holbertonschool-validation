@@ -1,29 +1,24 @@
 #!/bin/bash
 
-# Check if Hugo is installed
-if ! command -v hugo >/dev/null 2>&1; then
-  # Install Hugo
-  echo "Installing Hugo..."
-  wget -qO- https://github.com/gohugoio/hugo/releases/download/v0.82.0/hugo_0.82.0_Linux-64bit.tar.gz | tar xvz -C /tmp
-  sudo mv /tmp/hugo /usr/local/bin/
-fi
+# This is a basic shell script template
 
-# Check if Make is installed
-if ! command -v make >/dev/null 2>&1; then
-  # Install Make
-  echo "Installing Make..."
-  sudo apt-get update && sudo apt-get install -y make
-fi
+# Update the system
+apt-get update -y
+apt-get upgrade -y
 
-# Build the website
-echo "Building the website..."
-make build
+# Install necessary packages
+apt-get install -y package1 package2 package3
 
-# Check if the build was successful
-if [ $? -eq 0 ]; then
-  echo "Build successful!"
-  exit 0
+# Generate the website using Hugo
+hugo -v
+
+# Check if the generated website is present
+if [ -d "./dist" ]; then
+    echo "Website generated successfully."
 else
-  echo "Build failed."
-  exit 1
+    echo "Error: Website not generated."
+    exit 1
 fi
+
+# Exit with status code 0 if everything went well
+exit 0
