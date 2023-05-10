@@ -3,7 +3,7 @@ POST_TITLE ?= $(shell openssl rand -hex 16)
 POST_NAME ?= $(shell echo $(POST_TITLE) | tr '[:upper:]' '[:lower:]' | sed 's/ /-/' | sed 's/[^a-z0-9-]*//g')
 
 
-build:	# Build the website from markdown and configuration files
+build:	## Build the website from markdown and configuration files
 	(HUGO) --minify --cleanDestinationDir
 clean:	## Clean up the content of the dist/ directory
 	rm -rf dist/*
