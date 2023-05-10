@@ -1,12 +1,19 @@
-# holbertonschool-validation
+# My Awesome Website
+
+This is my awesome website built with Go-Hugo and Make.
+
 ## Prerequisites
 
+To build this website, you will need the following software:
+
 - Go-Hugo
-- GNU Make version 3.81 or 4.0
+- Make
 
 ## Lifecycle
 
-- `build`: Generate the website from the markdown and configuration files in the directory dist/.
-- `clean`: Cleanup the content of the directory dist/.
-- `post`: Create a new blog post whose filename and title come from the environment variables POST_TITLE and POST_NAME.
-- `help`: Show this help usage.
+To build and deploy this website, follow these steps:
+
+1. Clone this repository to your local machine.
+2. Run `make build` to build the website.
+3. Run `make post` to deploy the website to the production server.
+

@@ -1,17 +1,22 @@
-build: ## Generate the website from the markdown and configuration files in the directory dist/.
-	hugo
+# Build the website
+build:     
+    hugo
 
-clean: ## Cleanup the content of the directory dist/.
-	rm -rf dist/*
+# Remove the dist directory
+clean:     
+    rm -rf dist
 
-post: ## Create a new blog post whose filename and title come from the environment variables POST_TITLE and POST_NAME.
-	hugo new posts/$(POST_NAME).md
-	sed -i 's/title: ""/title: "$(POST_TITLE)"/g' content/posts/$(POST_NAME).md
+# Deploy the website
+post:     
+    rsync -avz --delete dist/ user@host:/var/www/site
 
-.PHONY: help
-help: ## Show this help usage.
+# Print out the list of targets and their usage
+help:
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@echo "  build: Build the website"
+	@echo "  clean: Remove the dist directory"
+	@echo "  post: Deploy the website"
 
-	@echo "  build   Build the website"
-	@echo "  clean   Clean up the dist/ directory"
-	@echo "  post    Create a new blog post with title and name from environment variables"
 
