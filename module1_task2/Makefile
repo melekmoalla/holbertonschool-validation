@@ -1,20 +1,20 @@
-# Build the website from markdown and configuration files
-build:
+
+build:	## Build the website from markdown and configuration files
 	hugo -s ./
 
-# Clean up the content of the dist/ directory
-clean:
+
+clean:	## Clean up the content of the dist/ directory
 	rm -rf ./dist/*
 
-# Create a new blog post with a title and name from environment variables
-post:
+
+post:	## Create a new blog post with a title and name from environment variables
 	hugo new posts/$(POST_NAME).md
 	sed -i.bak -e "s/title = \"\"/title = \"$(POST_TITLE)\"/" content/posts/$(POST_NAME).md
 	sed -i.bak -e "s/draft = true/draft = false/" content/posts/$(POST_NAME).md
 	rm -f content/posts/$(POST_NAME).md.bak
 
-# Show usage information for all targets
-help:
+
+help:	## Show usage information for all targets
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Targets:"
