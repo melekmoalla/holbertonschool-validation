@@ -14,4 +14,4 @@ help:	## Display available targets and their usage/comments
 	@echo "  build   Build the website"
 	@echo "  clean   Clean up the dist/ directory"
 	@echo "  post    Create a new blog post with title and name from environment variables"
-	@echo "  help    Show this help message"
+
