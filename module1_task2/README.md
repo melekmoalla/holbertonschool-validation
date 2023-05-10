@@ -16,4 +16,4 @@ To build and deploy this website, follow these steps:
 1. Clone this repository to your local machine.
 2. Run `make build` to build the website.
 3. Run `make post` to deploy the website to the production server.
-
+3. Run `make clean` Cleanup the content
