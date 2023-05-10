@@ -1,17 +1,17 @@
-# Define variables
-POST_TITLE ?= $(shell uuidgen)
-POST_NAME ?= $(shell uuidgen)
-POST_DATE ?= $(shell date +"%Y-%m-%d %T %z")
+.PHONY: build clean post
 
-# Build target
 build:
-	hugo --destination=./dist/
+	hugo --minify -s . -d dist
 
-# Clean target
 clean:
-	rm -rf ./dist/*
+	rm -rf dist/*
 
-# Post target
 post:
-	hugo new --kind post ./content/posts/$(POST_NAME).md
-	
+ifndef POST_NAME
+	$(error POST_NAME is undefined)
+endif
+ifndef POST_TITLE
+	$(error POST_TITLE is undefined)
+endif
+	hugo new --kind post content/posts/$(POST_NAME).md
+	sed -i 's/title: ""/title: "$(POST_TITLE)"/g' content/posts/$(POST_NAME).md
