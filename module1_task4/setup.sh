@@ -1,14 +1,18 @@
 #!/bin/bash
 
-# Check if Docker daemon is running
-if ! systemctl status docker >/dev/null 2>&1; then
-    echo "Docker daemon is not running. Starting it..."
-    sudo systemctl start docker
+set -e
+
+if ! command -v hugo >/dev/null 2>&1; then
+  echo "Installing Hugo..."
+  sudo apt-get update
+  sudo apt-get install hugo -y
 fi
 
-# Install Hugo
-sudo apt-get update
-sudo apt-get install -y hugo
+if ! command -v make >/dev/null 2>&1; then
+  echo "Installing Make..."
+  sudo apt-get update
+  sudo apt-get install make -y
+fi
 
-# Generate the website
-hugo -d dist/
+echo "Building website..."
+make build
