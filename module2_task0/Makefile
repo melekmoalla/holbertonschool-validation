@@ -20,7 +20,9 @@ stop:
 
 # Clean up generated files
 clean:
-	rm -f $(BINARY_NAME) $(LOG_FILE)
+    -kill "$(shell pgrep awesome-api)"
+    -rm -f awesome-api
+    -rm -f awesome-api.log
 
 # Test the application
 test:
