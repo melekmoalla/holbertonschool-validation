@@ -15,6 +15,7 @@ run: build ## Run the application
 stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
+.PHONY: clean
 clean: ## Stop the application, delete binary and log files
 	-kill "$(shell pgrep $(BINARY_NAME))"
 	rm -f $(BINARY_NAME)
