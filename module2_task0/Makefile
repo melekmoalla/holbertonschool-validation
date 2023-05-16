@@ -19,8 +19,11 @@ stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
 
-clean: ## Clean up generated files
-	rm -f $(BINARY_NAME) $(LOG_FILE)
+.PHONY: clean
+clean: ## Stop the application, delete binary and log files.
+    -kill "$(shell pgrep awesome-api)"
+    -rm -f awesome-api
+    -rm -f awesome-api.log
 
 
 test: ## Test the application
@@ -32,11 +35,14 @@ test: ## Test the application
 	@echo
 
 
-help: ## Display help message
-	@echo "Available targets:"
-	@echo "  build   - compile the source code to a binary"
-	@echo "  run     - run the application in the background"
-	@echo "  stop    - stop the application"
-	@echo "  clean   - remove the binary and log file"
-	@echo "  test    - test the application"
-	@echo "  help    - display this help message"
+		
+help:	## Display help message
+    @echo "Available targets:"
+    @echo ""
+    @echo "help    : Print a list of all the goals with descriptions."
+    @echo "build   : Compile the source code of the application to a binary."
+    @echo "run     : Run the application in the background and write logs to a file."
+    @echo "stop    : Stop the running application."
+    @echo "clean   : Stop the application, delete binary and log files."
+    @echo "test    : Test the application by sending HTTP requests."
+    @echo ""
