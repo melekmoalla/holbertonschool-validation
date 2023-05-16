@@ -4,6 +4,13 @@ LOG_FILE := $(BINARY_NAME).log
 PORT := 9999
 
 
+help: ## Print a list of all the goals with descriptions
+	@echo "help: Print a list of all the goals with descriptions"
+	@echo "build: Compile the source code of the application to a binary"
+	@echo "clean: Stop the application, delete binary and log files"
+	@echo "run: Run the application in the background and write logs to a file"
+	@echo "stop: Stop the running application"
+	@echo "test: Test the application by sending HTTP requests"
 
 build: ## Build the binary
 	go build -o $(BINARY_NAME)
@@ -30,11 +37,3 @@ test: ## Test the application
 	curl -s http://localhost:$(PORT)/health
 	@echo
 
-
-
-help: ## Print a list of all the goals with descriptions
-	@echo "\033[34mclean\033[0m   : Stop the application, delete binary and log files."
-	@echo "\033[34mbuild\033[0m   : Compile the source code of the application to a binary."
-	@echo "\033[34mrun\033[0m     : Run the application in the background and write logs to a file."
-	@echo "\033[34mstop\033[0m    : Stop the running application."
-	@echo "\033[34mtest\033[0m    : Test the application by sending HTTP requests."
