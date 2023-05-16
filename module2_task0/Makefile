@@ -3,8 +3,6 @@ BINARY_NAME := awesome-api
 LOG_FILE := $(BINARY_NAME).log
 PORT := 9999
 
-# Default target
-.DEFAULT_GOAL := help
 
 
 build: ## Build the binary
