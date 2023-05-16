@@ -35,13 +35,10 @@ test: ## Test the application
 
 .PHONY: help
 help: ## Print a list of all the goals with descriptions.
-	@echo 
-	@echo ""
 	@echo  "\033[34mhelp\033[0m    : Print a list of all the goals with descriptions."
 	@echo  "\033[34mbuild\033[0m   : Compile the source code of the application to a binary."
 	@echo  "\033[34mrun\033[0m     : Run the application in the background and write logs to a file."
 	@echo  "\033[34mstop\033[0m    : Stop the running application."
 	@echo  "\033[34mclean\033[0m   : Stop the application, delete binary and log files."
 	@echo  "\033[34mtest\033[0m    : Test the application by sending HTTP requests."
-	@echo ""
 
