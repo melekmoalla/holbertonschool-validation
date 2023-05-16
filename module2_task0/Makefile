@@ -14,7 +14,6 @@ build: ## Build the binary
 run: build ## Run the application
 	./$(BINARY_NAME) > $(LOG_FILE) 2>&1 &
 
-
 stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
