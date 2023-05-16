@@ -38,7 +38,7 @@ test: ## Test the application
 		
 
 ## Print a list of all the goals with descriptions.
-.PHONY: help
+
 help: 
 	@echo ""
 	@echo  "\033[34mhelp\033[0m    : Print a list of all the goals with descriptions."
