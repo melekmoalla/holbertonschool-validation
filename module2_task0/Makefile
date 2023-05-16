@@ -21,9 +21,9 @@ stop: ## Stop the application
 
 .PHONY: clean
 clean: ## Stop the application, delete binary and log files.
-    -kill "$(shell pgrep awesome-api)"
-    -rm -f awesome-api
-    -rm -f awesome-api.log
+	-kill "$(shell pgrep awesome-api)"
+	-rm -f awesome-api
+	-rm -f awesome-api.log
 
 
 test: ## Test the application
@@ -37,12 +37,12 @@ test: ## Test the application
 
 		
 help:	## Display help message
-    @echo "Available targets:"
-    @echo ""
-    @echo "help    : Print a list of all the goals with descriptions."
-    @echo "build   : Compile the source code of the application to a binary."
-    @echo "run     : Run the application in the background and write logs to a file."
-    @echo "stop    : Stop the running application."
-    @echo "clean   : Stop the application, delete binary and log files."
-    @echo "test    : Test the application by sending HTTP requests."
-    @echo ""
+	@echo "Available targets:"
+	@echo ""
+	@echo "help    : Print a list of all the goals with descriptions."
+	@echo "build   : Compile the source code of the application to a binary."
+	@echo "run     : Run the application in the background and write logs to a file."
+	@echo "stop    : Stop the running application."
+	@echo "clean   : Stop the application, delete binary and log files."
+	@echo "test    : Test the application by sending HTTP requests."
+	@echo ""
