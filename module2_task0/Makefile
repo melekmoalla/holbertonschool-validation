@@ -3,7 +3,6 @@ BINARY_NAME := awesome-api
 LOG_FILE := $(BINARY_NAME).log
 PORT := 9999
 
-.PHONY: help
 
 help: ## Print a list of all the goals with descriptions
 	@echo "\033[34mclean\033[0m: Stop the application, delete binary and log files."
