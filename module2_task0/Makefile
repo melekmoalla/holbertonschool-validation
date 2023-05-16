@@ -19,11 +19,11 @@ stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
 
-.PHONY: clean
-clean: ## Stop the application, delete binary and log files.
-	-kill "$(shell pgrep awesome-api)"
-	-rm -f awesome-api
-	-rm -f awesome-api.log
+
+clean:	## Stop the application, delete binary and log files.
+    -kill "$(shell pgrep awesome-api)"
+    -rm -f awesome-api
+    -rm -f awesome-api.log
 
 
 test: ## Test the application
