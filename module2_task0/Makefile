@@ -20,8 +20,8 @@ stop: ## Stop the application
 
 
 
-clean: ## Stop the application, delete binary and log files.
-	-killall awesome-api
+clean:	## Stop the application, delete binary and log files.
+	-kill "$(shell pgrep awesome-api)"
 	-rm -f awesome-api
 	-rm -f awesome-api.log
 
