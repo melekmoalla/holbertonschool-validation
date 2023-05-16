@@ -21,7 +21,7 @@ stop: ## Stop the application
 
 
 clean: ## Stop the application, delete binary and log files
-	-kill "$(BINARY_NAME)"
+	-kill "$(shell pgrep $(BINARY_NAME))"
 	rm -f $(BINARY_NAME)
 	rm -f $(LOG_FILE)
 
