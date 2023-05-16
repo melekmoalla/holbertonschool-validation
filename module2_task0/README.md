@@ -12,3 +12,12 @@ This project follows the following life-cycle stages:
 - `make help`: Tests the application by sending HTTP requests.
 
 Please refer to the Makefile for more details on each stage.
+
+## Makefile Targets
+
+- `make help`: Print a list of all the goals with descriptions.
+- `make build`: Compile the source code of the application to a binary.
+- `make clean`: Stop the application, delete binary and log files.
+- `make run`: Run the application in the background and write logs to a file.
+- `make stop`: Stop the running application.
+- `make test`: Test the application by sending HTTP requests.
