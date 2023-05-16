@@ -5,7 +5,7 @@ PORT := 9999
 
 
 help: ## Print a list of all the goals with descriptions
-	@echo "help: Print a list of all the goals with descriptions"
+	@echo "help: ..."
 	@echo "build: Compile the source code of the application to a binary"
 	@echo "run: Run the application in the background and write logs to a file"
 	@echo "stop: Stop the running application"
