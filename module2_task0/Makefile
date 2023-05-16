@@ -17,10 +17,10 @@ run: build ## Run the application
 stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
-clean:	## Stop the application, delete binary and log files.
-	-kill "$(shell pgrep awesome-api)"
-	-rm -f awesome-api
-	-rm -f awesome-api.log
+clean: ## Stop the application, delete binary and log files
+	-kill "$(shell pgrep $(BINARY_NAME))"
+	rm -f $(BINARY_NAME)
+	rm -f $(LOG_FILE)
 
 
 test: ## Test the application
@@ -32,7 +32,7 @@ test: ## Test the application
 	@echo
 
 
-.PHONY: help
+
 help: ## Print a list of all the goals with descriptions
 	@echo "\033[34mclean\033[0m   : Stop the application, delete binary and log files."
 	@echo "\033[34mhelp\033[0m    : Print a list of all the goals with descriptions."
