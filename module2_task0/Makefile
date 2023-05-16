@@ -3,27 +3,27 @@ BINARY_NAME := awesome-api
 LOG_FILE := $(BINARY_NAME).log
 PORT := 9999
 
-# Default target
+"# Default target
 .DEFAULT_GOAL := help
 
-# Build the binary
-build:
+
+build: ## Build the binary
 	go build -o $(BINARY_NAME)
 
-# Run the application
-run: build
+
+run: build ## Run the application
 	./$(BINARY_NAME) > $(LOG_FILE) 2>&1 &
 
-# Stop the application
-stop:
+
+stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
-# Clean up generated files
-clean:
+
+clean: ## Clean up generated files
 	rm -f $(BINARY_NAME) $(LOG_FILE)
 
-# Test the application
-test:
+
+test: ## Test the application
 	@echo "Testing / endpoint:"
 	curl -s http://localhost:$(PORT)
 	@echo
@@ -31,8 +31,8 @@ test:
 	curl -s http://localhost:$(PORT)/health
 	@echo
 
-# Display help message
-help:
+
+help: ## Display help message
 	@echo "Available targets:"
 	@echo "  build   - compile the source code to a binary"
 	@echo "  run     - run the application in the background"
