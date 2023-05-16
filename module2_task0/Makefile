@@ -36,7 +36,8 @@ test: ## Test the application
 
 
 		
-help:	## Display help message
+## Print a list of all the goals with descriptions.
+help:
 	@echo "Available targets:"
 	@echo ""
 	@echo "help    : Print a list of all the goals with descriptions."
