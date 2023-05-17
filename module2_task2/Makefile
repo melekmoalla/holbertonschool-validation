@@ -38,8 +38,8 @@ test: ## Test the application
 lint: ## Perform static analysis on the source code
 	@golangci-lint run ./...
 
-unit-tests:	##should execute (successfully) the Golang unit tests:
-	@go test -v -short -coverprofile=coverage-units.out ./...
+unit-tests: ## 
+	go test -v -short -coverprofile=coverage-units.out ./...
 
 
 
