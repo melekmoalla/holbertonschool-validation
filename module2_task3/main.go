@@ -2,39 +2,71 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"net/http/httptest"
+	"testing"
 )
 
-func setupRouter() *gin.Engine {
-	router := gin.Default()
-
-	router.GET("/hello", HelloHandler)
-	router.GET("/healthcheck", HealthCheckHandler)
-
-	return router
-}
-
-func HelloHandler(c *gin.Context) {
-	name := c.Query("name")
-
-	// Return status 400 if name is empty
-	if name == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Name parameter is missing"})
-		return
+func Test_server(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Flag `-short` provided: skipping Integration Tests.")
 	}
 
-	// Write the string "Hello <name>" into the response's body
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Hello %s!", name)})
-}
+	tests := []struct {
+		name         string
+		URI          string
+		responseCode int
+		body         string
+	}{
+		{
+			name:         "Home page",
+			URI:          "",
+			responseCode: 404,
+			body:         "404 page not found\n",
+		},
+		{
+			name:         "Hello page",
+			URI:          "/hello?name=Holberton",
+			responseCode: 200,
+			body:         "Hello Holberton!",
+		},
+		{
+			name:         "Health check",
+			URI:          "/healthcheck",
+			responseCode: 200,
+			body:         "Server is healthy!",
+		},
+	}
 
-func HealthCheckHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "OK"})
-}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := httptest.NewServer(setupRouter())
+			defer ts.Close()
 
-func main() {
-	router := setupRouter()
-	router.Run(":8080")
+			res, err := http.Get(ts.URL + tt.URI)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			// Check that the status code is what you expect.
+			expectedCode := tt.responseCode
+			gotCode := res.StatusCode
+			if gotCode != expectedCode {
+				t.Errorf("handler returned wrong status code: got %q want %q", gotCode, expectedCode)
+			}
+
+			// Check that the response body is what you expect.
+			expectedBody := tt.body
+			bodyBytes, err := ioutil.ReadAll(res.Body)
+			res.Body.Close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			gotBody := string(bodyBytes)
+			if gotBody != expectedBody {
+				t.Errorf("handler returned unexpected body: got %q want %q", gotBody, expectedBody)
+			}
+		})
+	}
 }
