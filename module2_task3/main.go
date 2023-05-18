@@ -2,9 +2,19 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
+
+func setupRouter() *gin.Engine {
+	router := gin.Default()
+
+	router.GET("/hello", HelloHandler)
+	router.GET("/health", HealthCheckHandler)
+
+	return router
+}
+
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	// Extract the query parameters from the GET request
