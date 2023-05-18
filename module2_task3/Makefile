@@ -1,7 +1,7 @@
 .PHONY: build run stop clean help lint unit-tests integration-tests test
 
-# Default target
-build:
+
+build:	##test
 	go build -o awesome-api
 
 run: build	##test
