@@ -27,19 +27,19 @@ help:
 	@echo "  integration-tests Run integration tests"
 	@echo "  test              Run all tests"
 
-lint:
+lint:	##test
 	gofmt -l -s -w .
 	golangci-lint run
 
-unit-tests:
+unit-tests:	##test
 	go test -v -coverprofile=coverage-units.out ./...
 
-integration-tests:
+integration-tests:	##test
 	go test -v -coverprofile=coverage-integrations.out ./...
 
-test: unit-tests integration-tests
+test:	 unit-tests integration-tests	##test
 	@echo "Running all tests"
 
-README.md:
+README.md: ##test
 	@echo "Update the README.md file with the necessary information."
 
