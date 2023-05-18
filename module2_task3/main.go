@@ -1,28 +1,40 @@
 package main
 
 import (
+	"fmt"
+	"io"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 func setupRouter() *gin.Engine {
 	router := gin.Default()
 
-	// Define your API routes here
 	router.GET("/hello", HelloHandler)
 	router.GET("/healthcheck", HealthCheckHandler)
 
 	return router
 }
 
+func HelloHandler(c *gin.Context) {
+	name := c.Query("name")
+
 	// Return status 400 if name is empty
 	if name == "" {
-		w.WriteHeader(400)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Name parameter is missing"})
 		return
 	}
 
 	// Write the string "Hello <name>" into the response's body
-	_, _ = io.WriteString(w, fmt.Sprintf("Hello %s!", name))
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Hello %s!", name)})
+}
 
-	// Print a line in the ACCESS log
-	fmt.Printf("HIT: hello handler with name %s \n", name)
+func HealthCheckHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"status": "OK"})
+}
+
+func main() {
+	router := setupRouter()
+	router.Run(":8080")
 }
