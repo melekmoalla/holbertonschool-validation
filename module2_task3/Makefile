@@ -34,8 +34,6 @@ unit-tests: ## Run unit tests
 
 integration-tests: ## Run integration tests
 	go test -coverprofile=coverage-integrations.out -tags=integration ./...
-	@echo "Integration test coverage:"
-	@go tool cover -func=coverage-integrations.out | grep -E "setupRouter|HealthCheckHandler|HelloHandler"
 
 .PHONY: check-integration-coverage
 
