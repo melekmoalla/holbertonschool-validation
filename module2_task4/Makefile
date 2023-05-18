@@ -4,25 +4,20 @@ W3CVALIDATOR := /opt/W3C-Validator/w3c_validator.py
 
 .PHONY: build check help clean validate
 
-build:
+build:	##test
     @make check && hugo --destination dist
 
-check:
+check:	##test
     @echo "Running Markdown lint..."
     @$(MARKDOWNLINT) content
     @echo "Running Markdown link check..."
     @$(MARKDOWNLINKCHECK) --quiet --config .markdown-link-check.yml
 
-help:
-    @echo "Available targets:"
-    @echo "  build     : Generate the website"
-    @echo "  check     : Run markdown lint and link check"
-    @echo "  help      : Display this help message"
-    @echo "  clean     : Delete the dist/ directory"
-    @echo "  validate  : Validate the generated HTML"
+help:	##test
+	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean:
+clean:	##test
     @rm -rf dist/
 
-validate:
+validate:	##test
     @python3 $(W3CVALIDATOR) --file dist/index.html --extension html >/dev/null || true
