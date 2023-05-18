@@ -3,7 +3,7 @@ BINARY_NAME := awesome-api
 LOG_FILE := $(BINARY_NAME).log
 PORT := 9999
 
-.PHONY: help build run stop clean test lint unit-tests
+.PHONY: help build run stop clean test lint unit-tests integration-tests
 
 help: ## Print a list of all the goals with descriptions
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
@@ -17,25 +17,22 @@ run: build ## Run the application
 stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
-clean: ## Stop the application, delete binary and log files
+clean: ## Clean up generated files and artifacts
 	-kill "$(shell pgrep $(BINARY_NAME))"
 	rm -f $(BINARY_NAME)
 	rm -f $(LOG_FILE)
+	rm -f coverage-units.out
+	rm -f coverage-integrations.out
 
-test: ## Test the application
-	@echo "Testing / endpoint:"
-	curl -s http://localhost:$(PORT)
-	@echo
-	@echo "Testing /health endpoint:"
-	curl -s http://localhost:$(PORT)/health
-	@echo
+test: unit-tests integration-tests ## Run both unit tests and integration tests
 
 lint: ## Perform static analysis on the source code
-	@golangci-lint run 
+	@golangci-lint run
 
 unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
 
 integration-tests: ## Run integration tests
 	go test -coverprofile=coverage-integrations.out -tags=integration ./... -v
-
+	@echo "Integration test coverage:"
+	@go tool cover -func=coverage-integrations.out | grep -E "setupRouter|HealthCheckHandler|HelloHandler"
