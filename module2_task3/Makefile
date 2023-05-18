@@ -21,12 +21,12 @@ stop: ## Stop the application
 	kill "$(shell pgrep $(BINARY_NAME))"
 
 
-clean:
+clean: ##test
 	rm -f coverage-units.out coverage-integrations.out
 
 
 
-test: unit-tests integration-tests
+test: unit-tests integration-tests ##test
 
 
 
@@ -37,7 +37,7 @@ unit-tests: ##
 	@go test -v -short -coverprofile=coverage-units.out 
 
 
-integration-tests:
+integration-tests: ##test
 	@go test -tags=integration -coverprofile=coverage-integrations.out ./...
 
 
