@@ -14,12 +14,7 @@ check:	##test
 	@$(MARKDOWNLINKCHECK) --quiet --config .markdown-link-check.yml
 
 help:	##test
-	@echo "Available targets:"
-	@echo "  build     : Generate the website"
-	@echo "  check     : Run markdown lint and link check"
-	@echo "  help      : Display this help message"
-	@echo "  clean     : Delete the dist/ directory"
-	@echo "  validate  : Validate the generated HTML"
+	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)	
 
 clean:	##test
 	@rm -rf dist/
