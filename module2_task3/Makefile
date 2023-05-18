@@ -10,22 +10,12 @@ run: build	##test
 stop:	##test
 	pkill awesome-api
 
-clean:	##test
-	rm -f awesome-api
-	rm -f coverage-units.out
-	rm -f coverage-integrations.out
+help: ## Print a list of all the goals with descriptions
+	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-help:	##test
-	@echo "Available targets:"
-	@echo "  build             Build the project"
-	@echo "  run               Run the project"
-	@echo "  stop              Stop the running server"
-	@echo "  clean             Clean up project files"
-	@echo "  help              Display this help message"
-	@echo "  lint              Run linter"
-	@echo "  unit-tests        Run unit tests"
-	@echo "  integration-tests Run integration tests"
-	@echo "  test              Run all tests"
+.PHONY: clean
+clean: ## Cleanup generated files and directories
+	rm -f coverage-units.out coverage-integrations.out
 
 lint:	##test
 	gofmt -l -s -w .
@@ -37,7 +27,7 @@ unit-tests:	##test
 integration-tests:	##test
 	go test -v -coverprofile=coverage-integrations.out ./...
 
-test:	 unit-tests integration-tests	##test
+test:	unit-tests integration-tests	##test
 	@echo "Running all tests"
 
 README.md: ##test
