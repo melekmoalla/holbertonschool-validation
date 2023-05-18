@@ -4,18 +4,18 @@
 build:
 	go build -o awesome-api
 
-run: build
+run: build	##test
 	./awesome-api
 
-stop:
+stop:	##test
 	pkill awesome-api
 
-clean:
+clean:	##test
 	rm -f awesome-api
 	rm -f coverage-units.out
 	rm -f coverage-integrations.out
 
-help:
+help:	##test
 	@echo "Available targets:"
 	@echo "  build             Build the project"
 	@echo "  run               Run the project"
