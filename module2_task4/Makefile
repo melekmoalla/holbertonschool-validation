@@ -6,7 +6,7 @@ PORT := 9999
 help: ## Print a list of all the goals with descriptions
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-build: 
+build: ##test
 	hugo
 	check ## Build the binary
 	@echo "Building $(BINARY_NAME)..."
