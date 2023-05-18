@@ -34,7 +34,8 @@ unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
 
 integration-tests:	##test
-	go test -coverprofile=coverage-integrations.out -tags=integration ./...
+	go test -coverprofile=coverage-integrations.out -coverpkg=./... -tags=integration ./...
+
 
 
 .PHONY: check-integration-coverage
