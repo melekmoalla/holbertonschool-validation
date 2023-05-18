@@ -1,31 +1,37 @@
-.PHONY: build run stop clean help lint unit-tests integration-tests test
+# Variables
+BINARY_NAME := awesome-api
+LOG_FILE := $(BINARY_NAME).log
+PORT := 9999
 
-build: ## Build the awesome-api binary
-	go build -o awesome-api
-
-run: build ## Run the awesome-api binary
-	./awesome-api
-
-stop: ## Stop the running awesome-api process
-	pkill awesome-api
+.PHONY: help build run stop clean test lint unit-tests
 
 help: ## Print a list of all the goals with descriptions
-	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-lint: ## Run code formatting and linter checks
-	gofmt -l -s -w .
-	golangci-lint run
+build: lint ## Build the binary
+	go build -o $(BINARY_NAME)
+
+run: build ## Run the application
+	./$(BINARY_NAME) > $(LOG_FILE) 2>&1 &
+
+stop: ## Stop the application
+	kill "$(shell pgrep $(BINARY_NAME))"
+
+clean: ## Stop the application, delete binary and log files
+	-kill "$(shell pgrep $(BINARY_NAME))"
+	rm -f $(BINARY_NAME)
+	rm -f $(LOG_FILE)
+
+test: ## Test the application
+	@echo "Testing / endpoint:"
+	curl -s http://localhost:$(PORT)
+	@echo
+	@echo "Testing /health endpoint:"
+	curl -s http://localhost:$(PORT)/health
+	@echo
+
+lint: ## Perform static analysis on the source code
+	@golangci-lint run 
 
 unit-tests: ## Run unit tests
-	go test -v -coverprofile=coverage-units.out ./...
-
-integration-tests: ## Run integration tests
-	go test -coverprofile=coverage-integrations.out -tags=integration ./...
-
-test: unit-tests integration-tests ## Run both unit tests and integration tests
-
-clean: ## Clean up generated files and artifacts
-	rm -f coverage-units.out coverage-integrations.out
-
-README.md: ## Update the README.md file with the necessary information.
-	@echo "Update the README.md file with the necessary information."
+	@go test -v -short -coverprofile=coverage-units.out
