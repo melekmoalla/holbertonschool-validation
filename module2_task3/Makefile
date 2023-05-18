@@ -33,6 +33,11 @@ unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
 
 integration-tests: ## Run integration tests
-	go test -coverprofile=coverage-integrations.out -tags=integration ./... -v
+	go test -coverprofile=coverage-integrations.out -tags=integration ./...
 	@echo "Integration test coverage:"
 	@go tool cover -func=coverage-integrations.out | grep -E "setupRouter|HealthCheckHandler|HelloHandler"
+
+.PHONY: check-integration-coverage
+
+check-integration-coverage: ## Check if integration test coverage is 100%
+	@go tool cover -func=coverage-integrations.out | grep -E "setupRouter|HealthCheckHandler|HelloHandler" | awk '{print $$3}' | grep -q ^100$ || (echo "Integration test coverage is not 100% for setupRouter, HealthCheckHandler, or HelloHandler"; exit 1)
