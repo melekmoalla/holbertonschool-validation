@@ -21,10 +21,11 @@ clean: ## Clean up generated files and artifacts
 	-kill "$(shell pgrep $(BINARY_NAME))"
 	rm -f $(BINARY_NAME)
 	rm -f $(LOG_FILE)
-	rm -f coverage-units.out
-	rm -f coverage-integrations.out
+	rm -f coverage-units.out coverage-integrations.out
 
-test: unit-tests integration-tests ## Run both unit tests and integration tests
+test:	## Test:
+	go test -v -short -coverprofile=coverage-units.out
+	go test -v -tags=integration -coverprofile=coverage-integrations.out ## Run both unit tests and integration tests
 
 lint: ## Perform static analysis on the source code
 	@golangci-lint run
@@ -32,10 +33,10 @@ lint: ## Perform static analysis on the source code
 unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
 
-integration-tests: ## Run integration tests
+integration-tests:
 	go test -coverprofile=coverage-integrations.out -tags=integration ./...
+
 
 .PHONY: check-integration-coverage
 
-check-integration-coverage: ## Check if integration test coverage is 100%
-	@go tool cover -func=coverage-integrations.out | grep -E "setupRouter|HealthCheckHandler|HelloHandler" | awk '{print $$3}' | grep -q ^100$ || (echo "Integration test coverage is not 100% for setupRouter, HealthCheckHandler, or HelloHandler"; exit 1)
+

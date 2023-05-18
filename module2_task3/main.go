@@ -2,19 +2,45 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"io"
+	"log"
 	"net/http"
+	"os"
+
+	"github.com/gorilla/mux"
 )
 
-func setupRouter() *gin.Engine {
-	router := gin.Default()
+func main() {
+	httpAddr := "0.0.0.0:9999"
+	if port := os.Getenv("PORT"); port != "" {
+		httpAddr = "0.0.0.0:" + port
+	}
+	fmt.Println("HTTP Server listening on", httpAddr)
 
-	router.GET("/hello", HelloHandler)
-	router.GET("/health", HealthCheckHandler)
-
-	return router
+	// Start an HTTP server using the custom router
+	log.Fatal(http.ListenAndServe(httpAddr, setupRouter()))
 }
 
+func setupRouter() *mux.Router {
+	// Create a new empty HTTP Router
+	r := mux.NewRouter()
+
+	// When an HTTP GET request is received on the path /health, delegate to the HealthCheckHandler function
+	r.HandleFunc("/health", HealthCheckHandler).Methods("GET")
+
+	// When an HTTP GET request is received on the path /hello, delegate to the HelloHandler function
+	r.HandleFunc("/hello", HelloHandler).Methods("GET")
+
+	return r
+}
+
+func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	// Print a line in the logs
+	fmt.Println("HIT: healthcheck")
+
+	// Write the string "ALIVE" into the response's body
+	_, _ = io.WriteString(w, "ALIVE")
+}
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	// Extract the query parameters from the GET request
