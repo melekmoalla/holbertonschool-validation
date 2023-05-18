@@ -33,7 +33,7 @@ lint: ## Perform static analysis on the source code
 unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
 
-integration-tests:
+integration-tests:	##test
 	go test -coverprofile=coverage-integrations.out -tags=integration ./...
 
 
