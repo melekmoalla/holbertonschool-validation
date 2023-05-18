@@ -12,7 +12,7 @@ This project follows the following life-cycle stages:
 - `make help`: Tests the application by sending HTTP requests.
 - `make lint`: Tests the application by sending HTTP requests.
 - `make tunit-tests`: Tests the application by sending HTTP requests.
-
+- `make integration-test`: Tests the application by sending HTTP requests.
 Please refer to the Makefile for more details on each stage.
 
 ## Makefile Targets
