@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+
+
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	// Extract the query parameters from the GET request
 	queryParams := r.URL.Query()
@@ -34,4 +36,13 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Print a line in the ACCESS log
 	fmt.Printf("HIT: hello handler with name %s \n", name)
+}
+
+func main() {
+	http.HandleFunc("/hello", HelloHandler)
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Printf("Server error: %s\n", err)
+	}
 }
