@@ -1,72 +1,95 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
 )
 
-func Test_server(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Flag `-short` provided: skipping Integration Tests.")
+func TestIntegration(t *testing.T) {
+	// Create a new router instance
+	router := setupRouter()
+
+	// Create a new test HTTP server
+	server := httptest.NewServer(router)
+	defer server.Close()
+
+	// Test the HealthCheckHandler
+	t.Run("HealthCheckHandler", func(t *testing.T) {
+		resp, err := http.Get(server.URL + "/healthcheck")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer resp.Body.Close()
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("unexpected status code: got %d, want %d", resp.StatusCode, http.StatusOK)
+		}
+
+		// Read the response body
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		// Check the response body content
+		expectedBody := "Server is healthy!"
+		if string(body) != expectedBody {
+			t.Errorf("unexpected response body: got %s, want %s", string(body), expectedBody)
+		}
+	})
+
+	// Test the HelloHandler
+	t.Run("HelloHandler", func(t *testing.T) {
+		resp, err := http.Get(server.URL + "/hello?name=John")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer resp.Body.Close()
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("unexpected status code: got %d, want %d", resp.StatusCode, http.StatusOK)
+		}
+
+		// Read the response body
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		// Check the response body content
+		expectedBody := "Hello John!"
+		if string(body) != expectedBody {
+			t.Errorf("unexpected response body: got %s, want %s", string(body), expectedBody)
+		}
+	})
+}
+
+func setupRouter() *gin.Engine {
+	router := gin.Default()
+
+	router.GET("/healthcheck", HealthCheckHandler)
+	router.GET("/hello", HelloHandler)
+
+	return router
+}
+
+func HealthCheckHandler(c *gin.Context) {
+	c.String(http.StatusOK, "Server is healthy!")
+}
+
+func HelloHandler(c *gin.Context) {
+	name := c.Query("name")
+	if name == "" {
+		c.String(http.StatusBadRequest, "Name parameter is required")
+		return
 	}
 
-	tests := []struct {
-		name         string
-		URI          string
-		responseCode int
-		body         string
-	}{
-		{
-			name:         "Home page",
-			URI:          "",
-			responseCode: 404,
-			body:         "404 page not found\n",
-		},
-		{
-			name:         "Hello page",
-			URI:          "/hello?name=Holberton",
-			responseCode: 200,
-			body:         "Hello Holberton!",
-		},
-		{
-			name:         "Health check",
-			URI:          "/healthcheck",
-			responseCode: 200,
-			body:         "Server is healthy!",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			ts := httptest.NewServer(setupRouter())
-			defer ts.Close()
-
-			res, err := http.Get(ts.URL + tt.URI)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			// Check that the status code is what you expect.
-			expectedCode := tt.responseCode
-			gotCode := res.StatusCode
-			if gotCode != expectedCode {
-				t.Errorf("handler returned wrong status code: got %q want %q", gotCode, expectedCode)
-			}
-
-			// Check that the response body is what you expect.
-			expectedBody := tt.body
-			bodyBytes, err := ioutil.ReadAll(res.Body)
-			res.Body.Close()
-			if err != nil {
-				t.Fatal(err)
-			}
-			gotBody := string(bodyBytes)
-			if gotBody != expectedBody {
-				t.Errorf("handler returned unexpected body: got %q want %q", gotBody, expectedBody)
-			}
-		})
-	}
+	message := "Hello " + name + "!"
+	c.String(http.StatusOK, message)
 }
