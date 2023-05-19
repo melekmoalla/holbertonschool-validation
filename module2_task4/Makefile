@@ -1,23 +1,40 @@
-MARKDOWNLINT := markdownlint-cli@0.26.0
-MARKDOWNLINKCHECK := markdown-link-check@3.8.6
-W3CVALIDATOR := /opt/W3C-Validator/w3c_validator.py
+# Variables
+BINARY_NAME := awesome-api
+LOG_FILE := $(BINARY_NAME).log
+PORT := 9999
 
-.PHONY: build check help clean validate
 
-build:	##test
-    @make check && hugo --destination dist
+help: ## Print a list of all the goals with descriptions
+	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-check:	##test
-    @echo "Running Markdown lint..."
-    @$(MARKDOWNLINT) content
-    @echo "Running Markdown link check..."
-    @$(MARKDOWNLINKCHECK) --quiet --config .markdown-link-check.yml
+build: lint ## Build the binary
+	go build -o $(BINARY_NAME)
 
-help:	##test
-	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+run: build ## Run the application
+	./$(BINARY_NAME) > $(LOG_FILE) 2>&1 &
 
-clean:	##test
-    @rm -rf dist/
+stop: ## Stop the application
+	kill "$(shell pgrep $(BINARY_NAME))"
 
-validate:	##test
-    @python3 $(W3CVALIDATOR) --file dist/index.html --extension html >/dev/null || true
+clean: ## Clean up generated files and artifacts
+	-kill "$(shell pgrep $(BINARY_NAME))"
+	rm -f $(BINARY_NAME)
+	rm -f $(LOG_FILE)
+	rm -f coverage-units.out coverage-integrations.out
+
+test:	## Test:
+	go test -v -short -coverprofile=coverage-units.out
+	go test -v -tags=integration -coverprofile=coverage-integrations.out ## Run both unit tests and integration tests
+
+lint: ## Perform static analysis on the source code
+	@golangci-lint run
+
+unit-tests: ## Run unit tests
+	@go test -v -short -coverprofile=coverage-units.out
+	
+integration-tests: ##test
+	@go test -v -tags=integration -coverprofile=coverage-integrations.out ./...
+
+
+
+

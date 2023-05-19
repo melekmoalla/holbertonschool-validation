@@ -13,8 +13,7 @@ This project follows the following life-cycle stages:
 - `make lint`: Tests the application by sending HTTP requests.
 - `make unit-tests`: Tests the application by sending HTTP requests.
 - `make integration-tests`: Tests the application by sending HTTP requests.
-- `validate`: Tests the application by sending HTTP requests.
-- `check`: Tests the application by sending HTTP requests.
+
 
 ## Makefile Targets
 
@@ -26,4 +25,3 @@ This project follows the following life-cycle stages:
 - `make test`: Test the application by sending HTTP requests.
 - `make unit-tests`: Tests the application by sending HTTP requests.
 - `make integration-tests`: Tests the application by sending HTTP requests.
-- `check`: Tests the application by sending HTTP requests.
