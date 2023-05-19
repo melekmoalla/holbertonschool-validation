@@ -3,7 +3,6 @@ BINARY_NAME := awesome-api
 LOG_FILE := $(BINARY_NAME).log
 PORT := 9999
 
-.PHONY: help build run stop clean test lint unit-tests integration-tests
 
 help: ## Print a list of all the goals with descriptions
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
@@ -36,7 +35,6 @@ unit-tests: ## Run unit tests
 integration-tests: ##test
 	go test -v -tags=integration -coverprofile=coverage-integrations.out ./...
 
-.PHONY: integration-tests
 
 
 
