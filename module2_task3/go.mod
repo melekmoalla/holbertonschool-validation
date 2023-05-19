@@ -1,4 +1,4 @@
-module github.com/Soniabensaad/awesome-api
+module github.com/melekmoalla/awesome-api
 
 go 1.13
 
