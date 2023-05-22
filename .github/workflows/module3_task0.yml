@@ -1,22 +1,20 @@
+name: module3_task0
+
 on:
   push:
     branches:
-      - master
+      - main
   schedule:
     - cron: '0 0 * * *'  # Executes once per day
 
-    
-    jobs:
-      build:
-    
-        runs-on: ubuntu-22.04
-    
-        steps:
-          - name: "Checkout"  # Download code from the repository
-            uses: actions/checkout@v3
-    
-          - name: "Run bash script"  # Execute the command make help
-            run: cd module3_task1 && ./setup.sh
+jobs:
+  build:
+    runs-on: ubuntu-22.04
 
-          - name: "Run make build"  # Execute the command make help
-            run: cd module3_task0 && make build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Validate Makefile
+        run: |
+          make help
