@@ -22,5 +22,4 @@ jobs:
 
       - name: Validate Makefile
         run: make help
-        working-directory: https://github.com/melekmoalla/holbertonschool-validation/tree/main/module3_task0
-
+        working-directory: .
