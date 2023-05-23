@@ -1,4 +1,4 @@
-module github.com/uoch/module2_task0
+module github.com/melekmoalal/module2_task0
 
 go 1.15
 
