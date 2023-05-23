@@ -20,5 +20,3 @@ jobs:
       - name: Validate Makefile execution make help command
         run: make help
         working-directory: module3_task0
-
-l
