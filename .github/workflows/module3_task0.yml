@@ -17,6 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Validate Makefile execution make help command
+      - name: Validate Makefile 
         run: make help
         working-directory: module3_task0
