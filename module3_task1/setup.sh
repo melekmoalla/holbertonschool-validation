@@ -12,3 +12,10 @@ sudo rm hugo.deb
 sudo go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.52.2
 sudo npm install -g markdownlint-cli
 sudo npm install -g markdown-link-check
+
+if ! command -v hugo &> /dev/null; then
+  echo "Hugo not found. Installing..."
+  # Add commands to install Hugo here
+else
+  echo "Hugo already installed"
+fi
