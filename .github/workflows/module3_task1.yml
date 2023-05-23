@@ -1,3 +1,4 @@
+---
 name: module3_task1
 
 on:
@@ -5,18 +6,25 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *' # Runs once per day at midnight UTC
+    - cron: '0 0 * * *'  # Runs at 12:00 AM UTC every day
 
 jobs:
-  build:
+  builds:
+    # name of job
+    name: first job
+    # env of execution
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup environment
+      - uses: actions/checkout@v3
+      - name: Execute the script setup.sh
         run: ./setup.sh
-
-      - name: Build
-        run: make build
+        working-directory: module3_task1
+      - name: Validate Makefile execution make help command
+        run: |
+          make help
+          make build
+          make run
+          make stop
+          make clean
+        working-directory: module3_task1
