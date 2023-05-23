@@ -1,11 +1,11 @@
-name: Module 3 Task 1
+name: module3_task1
+
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  schedule:
+    - cron: '0 0 * * *' # Runs once per day at midnight UTC
 
 jobs:
   build:
@@ -15,12 +15,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up build environment
-        run: |
-          sudo apt-get update
-          sudo apt-get install make golang -y
-          chmod +x setup.sh
-          ./setup.sh
+      - name: Setup environment
+        run: ./setup.sh
 
-      - name: Build the project
+      - name: Build
         run: make build
