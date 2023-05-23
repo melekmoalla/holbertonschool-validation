@@ -1,10 +1,14 @@
-docker run --rm --tty --interactive --volume=$(pwd):/app --workdir=/app ubuntu:18.04 /bin/bash
-apt-get update && apt-get install -y hugo make
+#!/bin/bash
 
-apt-get install wget
+sudo apt-get update && sudo apt-get install -y make git
 
-wget https://github.com/gohugoio/hugo/releases/download/v0.84.0/hugo_extended_0.84.0_Linux-64bit.tar.gz
-tar -zxvf hugo_extended_0.84.0_Linux-64bit.tar.gz
-mv hugo /usr/local/bin
+# download/install minimal version to use template ananke
+sudo curl -L https://github.com/gohugoio/hugo/releases/download/v0.84.0/hugo_extended_0.84.0_Linux-64bit.deb -o hugo.deb
+sudo apt install ./hugo.deb
+#remove file after installation
+sudo rm hugo.deb
 
-make build
+# download/install linter
+sudo go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.52.2
+sudo npm install -g markdownlint-cli
+sudo npm install -g markdown-link-check
