@@ -6,13 +6,13 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'  # Runs at 12:00 AM UTC every day
+    - cron: '0 0 * * *'
 
 jobs:
   builds:
-    # name of job
+
     name: first job
-    # env of execution
+
     runs-on: ubuntu-latest
 
     steps:
@@ -20,3 +20,5 @@ jobs:
       - name: Validate Makefile execution make help command
         run: make help
         working-directory: module3_task0
+
+l
