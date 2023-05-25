@@ -25,8 +25,8 @@ test:	## Test:
 	go test -v -short -coverprofile=coverage-units.out
 	go test -v -tags=integration -coverprofile=coverage-integrations.out ## Run both unit tests and integration tests
 
-# lint: ## Perform static analysis on the source code
-# 	pass
+lint: ## Perform static analysis on the source code
+	# Add linting command here
 
 unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
@@ -39,4 +39,4 @@ package:
 	@echo "Creating awesome-website.zip..."
 	# Add commands here to create the awesome-website.zip file
 	# For example:
-	zip -r awesome-website.zip awesome-api dist/
+	zip -r awesome-website.zip $(BINARY_NAME) dist/
