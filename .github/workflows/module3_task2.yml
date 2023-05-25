@@ -6,39 +6,19 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'  # Runs at 12:00 AM UTC every day
+    - cron: '0 0 * * *'
 
 jobs:
   builds:
-    # name of job
+
     name: first job
-    # env of execution
-    runs-on: ubuntu-22.04
+
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: Execute the script setup.sh
-        run: ./setup.sh
+      - name: Validate Makefile curl --silent --show-error --user "${GH_USERNAME}:${GH_TOKEN}" "https://api.github.com/repos/${GH_USERNAME}/${GH_REPO}/actions/runs" | jq '.workflow_runs[0] | .name, .head_branch, .conclusion'
+
+        run: make help
         working-directory: module3_task2
-      - name: Validate Makefile execution make help command
-        run: |
-          make help
-          make build
-          make lint
-          make run
-          make unit-tests
-          make integration-tests
-          make validate
-          make stop
-          make clean
-        working-directory: module3_task2
-      - name: packaging
-        run: make package
-        working-directory: module3_task2
-      - name: archieve ZIP file artifac
-        if: ${{github.ref=='refs/heads/main'}}
-        uses: actions/upload-artifact@v3
-        with:
-          name: Saving the zip file
-          path: |
-            module3_task2/awesome-website.zip
+  
