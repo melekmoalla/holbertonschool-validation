@@ -1,0 +1,27 @@
+# .github/workflows/module4_task1.yml
+
+name: Module4_Task1
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: make build-docker
+
+      - name: Run linting, build, and tests
+        run: make lint build test
+
+      # Additional steps if needed
