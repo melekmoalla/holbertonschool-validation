@@ -1,5 +1,6 @@
-lint: ## lint
-	markdownlint -f DEPLOY.md README.md || true
+lint:
+	markdownlint README.md DEPLOY.md
+
 
 build: check ## Build awesome-api
 	go build -o awesome-api
@@ -42,3 +43,7 @@ package: ## Produce awesome-website.zip containing awesome-api and dist director
 help: ## Display what each command does
 	cat Makefile | grep '##' | tr -d '##' | head -n -1
 
+package:
+	mkdir -p dist
+	cp awesome-api dist/
+	zip -r awesome-website.zip awesome-api dist/
