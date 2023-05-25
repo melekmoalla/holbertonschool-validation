@@ -9,11 +9,8 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  builds:
-
-    name: first job
-
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v3
