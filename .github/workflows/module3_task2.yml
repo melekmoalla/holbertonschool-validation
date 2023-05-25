@@ -20,5 +20,5 @@ jobs:
       - name: Validate Makefile curl --silent --show-error --user "${GH_USERNAME}:${GH_TOKEN}" "https://api.github.com/repos/${GH_USERNAME}/${GH_REPO}/actions/runs" | jq '.workflow_runs[0] | .name, .head_branch, .conclusion'
 
         run: make help
-        working-directory: module3_task2
+        working-directory: module3_task0
   
