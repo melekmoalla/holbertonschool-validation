@@ -2,8 +2,10 @@ name: module3_task3
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   release:
