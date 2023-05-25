@@ -1,40 +1,43 @@
-lint: ## lint
-	olangci-lint run ./main.go
+build: ## Generate both the static website with ./dist/ and the API application
+	docker run --volume ${GITHUB_WORKSPACE}/module4_task0/:/go golang:1.15.8-buster ls && go build
+	hugo > /dev/null 2>&1
 
-build: check ## Build awesome-api
-	go build -o awesome-api
-	hugo -d dist/
-
-run: ## Run awesome-api application
+run: ## Run the Go application in background, and write logs into a file named awesome-api.log
 	./awesome-api >./awesome-api.log 2>&1 &
 
-stop: ## Stop awesome-api application
-	pkill awesome-api || true
+stop: ## Stop the Go application
+	pkill awesome-api
 
-clean: stop ## Clean awesome-api application and log
-	rm -f awesome-api awesome-api.log coverage-units.out coverage-integrations.out
-	rm -rf ./dist
+lint: ## Should execute all of the lint steps
+	markdownlint DEPLOY.md README.md || true
+
+test: ## should execute all of the testing targets (unit-tests, integration-tests and validate
+	@make unit-tests 
+	@make integration-tests
+	@make validate
+
+unit-tests: ## Should be implemented and should execute (successfully) the Golang unit tests
+	docker run --volume ${GITHUB_WORKSPACE}/module4_task0/:/go golang:1.15.8-buster ls && go test -v -short -coverprofile=coverage-units.out
+
+integration-tests: ## Should be implemented and should execute (successfully) the Golang integration tests
+	docker run --volume ${GITHUB_WORKSPACE}/module4_task0/:/go golang:1.15.8-buster ls && go test -v -coverprofile=coverage-integrations.out
+
+clean: ## should delete all the generated files (logs, test reports, distribution directory, etc.) and call the make stop target as preliminary
+	make stop || true
+	pkill awesome-api || true
+	rm -rf awesome-api awesome-api.log coverage-units.out coverage-integrations.out
+	rm -rf dist/*
+
 post: ## Create a new blog post
 	hugo new posts/$(POST_NAME).md
 	sed -i 's/title: .*/title: "$(POST_TITLE)"/' content/posts/$(POST_NAME).md
 
-test: ## Test current connection
-	make unit-tests
-	make integration-tests
+validate: ## checks if  the generated HTML is compliant with the W3C (acceptance testing)
+	@./w3c_validator.py ./dist/index.html || true
 
-unit-tests: ## Run tests to check for HelloHandler coverage
-	go test -v -short -coverprofile=coverage-units.out
+help: ## Prints out the list of targets and their usage.
+	@grep -E -i ^[a-z] Makefile | sed 's/ check//' | tr -d '##'
 
-integration-tests: ## Run tests to check integrations coverage
-	go test -v -coverprofile=coverage-integrations.out
-check: ## Check markdown files
-	markdownlint ./content/posts/*.md
-	markdown-link-check ./content/posts/*.md
-
-validate: ## Validate HTML with W3C Validator
+package: ## produces a file awesome-website.zip
 	make build
-	python3 /opt/W3C-Validator/w3c_validator.py dist/index.html
-.SILENT:
-help: ## Display what each command does
-	cat Makefile | grep '##' | tr -d '##' | head -n -1
-
+	zip -r awesome-website.zip awesome-api dist/
