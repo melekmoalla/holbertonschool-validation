@@ -33,3 +33,4 @@ jobs:
           release_name: ${{ github.ref }}
           body: |
             $(cat DEPLOY.md)
+
