@@ -1,14 +1,46 @@
+name: module3_task3
 
-## What is in the archive and how to unarchive it?
+on:
+  push:
+    tags:
+      - '*'
 
-The archive ```awesome-website.zip``` contains awesome-api binary (api server) file and the dist/ directory (directory compiled).
-To unarchive use the following command :  ```unzip awesome-webstite.zip```
+jobs:
+  release:
+    runs-on: ubuntu-latest
 
-## What are the commands to start and stop the application?
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-To **RUN** the application : ```make run```
-To **STOP** the application : ```make stop```
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
 
-## How to customize where the application logs are written?
+      - name: Build Hugo website
+        run: hugo --minify --source ./website
 
-As default logs are written in ```awesome-api.log``` file. If you want change this localisation use this command : ```make run > [Path/File_name].log 2>&1```
+      - name: Create release
+        uses: softprops/gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            awesome-website.zip
+          release_name: ${{ github.ref }}
+          body: |
+            $(cat DEPLOY.md)
+          body_path: ./DEPLOY.md
+
+      - name: Update DEPLOY.md
+        run: echo "::set-output name=content::$(cat DEPLOY.md | sed -e 's/\[tag\]/${{ github.ref }}/g')" > ${{ github.workspace }}/DEPLOY.md
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update DEPLOY.md
+          commit_options: '--author="GitHub Actions"'
+
+      - name: Push changes
+        run: git push origin ${{ github.ref }}
