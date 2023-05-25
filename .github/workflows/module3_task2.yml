@@ -1,24 +1,39 @@
----
 name: module3_task2
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
-  builds:
-
-    name: first job
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Validate Makefile curl --silent --show-error --user "${GH_USERNAME}:${GH_TOKEN}" "https://api.github.com/repos/${GH_USERNAME}/${GH_REPO}/actions/runs" | jq '.workflow_runs[0] | .name, .head_branch, .conclusion'
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-        run: make help
-        working-directory: module3_task0
-  
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Lint
+        run: make lint
+
+      - name: Build and test
+        run: make build test
+
+      - name: Package
+        run: make package
+
+      - name: Archive package
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v2
+        with:
+          name: awesome-website
+          path: awesome-website.zip
