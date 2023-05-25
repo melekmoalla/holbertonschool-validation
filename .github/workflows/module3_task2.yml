@@ -7,55 +7,18 @@ on:
       - main
   schedule:
     - cron: '0 0 * * *'
+
 jobs:
-  build:
+  builds:
+
+    name: first job
+
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
       - name: Validate Makefile curl --silent --show-error --user "${GH_USERNAME}:${GH_TOKEN}" "https://api.github.com/repos/${GH_USERNAME}/${GH_REPO}/actions/runs" | jq '.workflow_runs[0] | .name, .head_branch, .conclusion'
-      - name: Build and test
-        run: |
-          make lint
-          make test
+
         run: make help
-        
-        working-directory: module3_task2  
-  name: module3_task2
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-
-      - name: Build and test
-        run: |
-          make lint
-          make test
-
-      - name: Package
-        run: make package
-
-      - name: Archive package
-        if: ${{ success() && github.ref == 'refs/heads/main' }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: package
-          path: awesome-website.zip
-
+        working-directory: module3_task1
+  
