@@ -6,31 +6,39 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # Runs at 12:00 AM UTC every day
 
 jobs:
   builds:
-
+    # name of job
     name: first job
+    # env of execution
+    runs-on: ubuntu-22.04
 
-    runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"  # Download code from the repository
-        uses: actions/checkout@v3
-      - name: "Run bash script"
-        run: cd module3_task2 && ./setup.sh
-      - name: "Run make build"  # Execute the command make build
-        run: cd module3_task2 && make build
-      - name: "Testing"
+      - uses: actions/checkout@v3
+      - name: Execute the script setup.sh
+        run: ./setup.sh
+        working-directory: module3_task2
+      - name: Validate Makefile execution make help command
         run: |
-          cd module3_task2 && make validate
-          make integration-tests
+          make help
+          make build
+          make lint
+          make run
           make unit-tests
-          make package
+          make integration-tests
+          make validate
+          make stop
           make clean
-      - name: "archive build"
+        working-directory: module3_task2
+      - name: packaging
+        run: make package
+        working-directory: module3_task2
+      - name: archieve ZIP file artifac
+        if: ${{github.ref=='refs/heads/main'}}
         uses: actions/upload-artifact@v3
         with:
-          name: "upload package"
-          path: module3_task2/awesome-website.zip
-  
+          name: Saving the zip file
+          path: |
+            module3_task2/awesome-website.zip
