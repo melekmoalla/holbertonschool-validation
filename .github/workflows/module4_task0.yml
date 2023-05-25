@@ -1,0 +1,29 @@
+name: module4_task0
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          docker run --rm -v $(pwd):/app -w /app golang:1.15.8-buster go build -o myapp
+
+      - name: Unit Tests
+        run: |
+          docker run --rm -v $(pwd):/app -w /app golang:1.15.8-buster go test -v ./...
+
+      - name: Integration Tests
+        run: |
+          docker run --rm -v $(pwd):/app -w /app golang:1.15.8-buster go test -v ./...
+
+      # Additional steps...
+
