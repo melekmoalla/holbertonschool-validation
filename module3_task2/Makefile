@@ -1,49 +1,40 @@
-lint:
-	markdownlint README.md DEPLOY.md
+# Variables
+BINARY_NAME := awesome-api
+LOG_FILE := $(BINARY_NAME).log
+PORT := 9999
 
 
-build: check ## Build awesome-api
-	go build -o awesome-api
-	hugo -d dist/
+help: ## Print a list of all the goals with descriptions
+	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-run: ## Run awesome-api application
-	./awesome-api >./awesome-api.log 2>&1 &
+build: lint ## Build the binary
+	go build -o $(BINARY_NAME)
 
-stop: ## Stop awesome-api application
-	pkill awesome-api || true
+run: build ## Run the application
+	./$(BINARY_NAME) > $(LOG_FILE) 2>&1 &
 
-clean: stop ## Clean awesome-api application and log
-	rm -f awesome-api awesome-api.log coverage-units.out coverage-integrations.out
-	rm -rf ./dist
-post: ## Create a new blog post
-	hugo new posts/$(POST_NAME).md
-	sed -i 's/title: .*/title: "$(POST_TITLE)"/' content/posts/$(POST_NAME).md
+stop: ## Stop the application
+	kill "$(shell pgrep $(BINARY_NAME))"
 
-test: ## Test current connection
-	make unit-tests
-	make integration-tests
+clean: ## Clean up generated files and artifacts
+	-kill "$(shell pgrep $(BINARY_NAME))"
+	rm -f $(BINARY_NAME)
+	rm -f $(LOG_FILE)
+	rm -f coverage-units.out coverage-integrations.out
 
-unit-tests: ## Run tests to check for HelloHandler coverage
+test:	## Test:
 	go test -v -short -coverprofile=coverage-units.out
+	go test -v -tags=integration -coverprofile=coverage-integrations.out ## Run both unit tests and integration tests
 
-integration-tests: ## Run tests to check integrations coverage
-	go test -v -coverprofile=coverage-integrations.out
-check: ## Check markdown files
-	markdownlint ./content/posts/*.md
-	markdown-link-check ./content/posts/*.md
+lint: ## Perform static analysis on the source code
+	@golangci-lint run
 
-validate: ## Validate HTML with W3C Validator
-	make build
-	python3 /opt/W3C-Validator/w3c_validator.py dist/index.html
+unit-tests: ## Run unit tests
+	@go test -v -short -coverprofile=coverage-units.out
+	
+integration-tests: ##test
+	@go test -v -tags=integration -coverprofile=coverage-integrations.out ./...
 
-package: ## Produce awesome-website.zip containing awesome-api and dist directory
-	zip -FSr awesome-website.zip . -i dist/ awesome-api
 
-.SILENT:
-help: ## Display what each command does
-	cat Makefile | grep '##' | tr -d '##' | head -n -1
 
-package:
-	mkdir -p dist
-	cp awesome-api dist/
-	zip -r awesome-website.zip awesome-api dist/
+
