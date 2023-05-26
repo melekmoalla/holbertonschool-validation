@@ -1,35 +1,88 @@
-# Prerequisites
+# <p align=center>Testing in the Software Development Methodology</p>
 
-- Golang should be installed in the environment 
-- Basic understanding of Makefile and command-line interface.
+<img src="https://www.mindinventory.com/blog/wp-content/uploads/2022/10/golang.gif"
+ width="100%">
 
-## Project Lifecycle
+## Awesome API with Static Website
+  
+This project integrates the Golang API with the static website built using Hugo. The application serves both the API web service and the static website from a single web service. The /hello endpoint is integrated with the static website allowing users to input their name and receive a personalized greeting. The application serves the static files from the ./dist/ directory.
 
-- `build`: compile the source code of the application to a binary named `awesome-api` using the command `go build`.
-- `run`: run the application in the background by executing the binary `awesome-api` and write logs into a file named `awesome-api.log` using the command `./awesome-api >./awesome-api.log 2>&1 &`.
-- `stop`: stop the application using the command `kill XXXXX` where XXXXX is the Process ID of the application.
-- `clean`: stop the application and delete the binary `awesome-api` and the log file `awesome-api.log`.
-- `test`: test the application to ensure that it behaves as expected.
-- `lint`: run the application through lint to check for errors
-- `unit-tests`: run tests to check for validation and HelloHandler coverage
-- `integration-tests`: run tests to check for integration coverage
-- `check`: Check markdown files exist in the /content/*
-- `validate`: Validate html format
-- `post`: Create a new blog post
+## Prerequisites
 
-## Requirements
+- Golang v1.15.*
+- NPM v7+ with NodeJS v14.*
+- Python3
 
-- A Makefile should be present and valid.
-- The binary `awesome-api` must NOT exist at the beginning, in the source code.
-- The goals `build`, `run`, `stop`, `clean`, and `test` should be implemented and mapped to the life-cycle stages of the same name.
-- The `help` goal must be implemented and print a list of all the goals with a sentence each.
+## Build Workflow
 
-## Workflow
+We have a GitHub Actions workflow named `module3_task1` that runs on every push to the repository and once per day. This workflow ensures that our application can be built successfully at any time.
 
-- Workflow module3_task 0 :
--> Clone the repository,
--> Use ubuntu-22.04 as the virtual machine.
--> Position yourself in the correct directory and execute the command make help to validate that the Makefile is present and implements the help target.
--> This workflow must be triggered:
-  Each time there is new code pushed on your repository,
-  And once per day (whatever time you want).
+The workflow runs on a virtual machine with Ubuntu 22.04 and performs the following steps:
+
+1. Checkout the code from the repository
+2. Set up the environment by running the `setup.sh` script, which installs Hugo
+3. Build the application by running `make build`
+  
+## Usage
+
+To build and run the application, use the following commands:
+
+```makefile
+$ make build
+$ make run
+```
+  
+Then, visit http://localhost:9999/posts/welcome/ to test the "Say Hello" feature.
+   
+To stop the application, run:
+  
+```makefile
+$ make stop
+```
+
+To clean up the generated files, run:
+
+```makefile
+$ make clean
+```
+
+## Lifecycle
+
+The project includes a `Makefile` to automate the life-cycle of the application. The following targets are available:
+
+- `help`: Display a list of available targets and their usage
+- `build`: Compile both the Go application and Hugo website
+- `run`: Run the application in the background and write logs to awesome-api.log
+- `stop`: Stop the running application
+- `lint`: Run static analysis on the source code using golangci-lint
+- `test`: Test the application by running unit tests, integration tests, and validate
+- `unit-tests`: Run the unit tests of the application with code coverage
+- `integration-tests`: Run the integration tests of the application with code coverage
+- `check`: Check markdown files for dead links and linting issues
+- `clean`: Stop the application and delete the binary, log, coverage files, and Hugo website build
+- `post`: Create a new publication file in the content/posts/ directory with a specified name and title
+- `package`: Create a ZIP archive containing the binary and the dist/ directory
+
+### Example
+
+```makefile
+$ make help
+
+help: Display a list of available targets and their usage
+build: Compile both the Go application and Hugo website
+clean: Stop the application and delete the binary, log, coverage files, and Hugo website build
+run: Run the application in the background and write logs to awesome-api.log
+stop: Stop the running application
+test: Test the application by running unit tests, integration tests, and validate
+lint: Run static analysis on the source code using golangci-lint
+unit-tests: Run the unit tests of the application with code coverage
+integration-tests: Run the integration tests of the application with code coverage
+check: Check markdown files for dead links and linting issues
+post: Create a new publication file in the content/posts/ directory with a specified name and title
+package: Create a ZIP archive containing the binary and the dist/ directory
+
+```
+
+# Author
+
+- Mathieu Morel

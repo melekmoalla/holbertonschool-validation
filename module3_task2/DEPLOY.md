@@ -1,14 +1,46 @@
+# Deployment Instructions
 
-## What is in the archive and how to unarchive it?
+## Contents of the Archive
 
-The archive ```awesome-website.zip``` contains awesome-api binary (api server) file and the dist/ directory (directory compiled).
-To unarchive use the following command :  ```unzip awesome-webstite.zip```
+The archive contains the following:
 
-## What are the commands to start and stop the application?
+- `awesome-api`: The binary executable for the Awesome API.
+- `dist/`: The directory containing the generated Hugo website files.
 
-To **RUN** the application : ```make run```
-To **STOP** the application : ```make stop```
+## How to Unarchive
 
-## How to customize where the application logs are written?
+To unarchive the ZIP file, run the following command:
 
-As default logs are written in ```awesome-api.log``` file. If you want change this localisation use this command : ```make run > [Path/File_name].log 2>&1```
+```makefile
+make package
+```
+
+## Starting and Stopping the Application
+
+To start the application:
+
+```makefile
+make build
+```
+
+To stop the application:
+
+```makefile
+make stop
+```
+
+## Customizing Log File Location
+
+By default, the application logs are written to `awesome-api.`log in the
+current directory.To customize the log directory, you can modify the `run`
+target in the Makefile
+or provide a command-line argument to specify the log file path.
+
+## Healthcheck
+
+To quickly verify that the application is running, access the
+following endpoint:
+
+```bash
+http://localhost:8080/healthcheck
+```
