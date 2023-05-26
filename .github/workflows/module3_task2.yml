@@ -6,19 +6,42 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
-  builds:
-
-    name: first job
-
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Validate Makefile curl --silent --show-error --user "${GH_USERNAME}:${GH_TOKEN}" "https://api.github.com/repos/${GH_USERNAME}/${GH_REPO}/actions/runs" | jq '.workflow_runs[0] | .name, .head_branch, .conclusion'
+      - name: "Checkout" # Download code from the repository
+        uses: actions/checkout@v3
 
-        run: make help
-        working-directory: module3_task0
-  
+      - name: "Install markdownlint" # Install markdownlint
+        run: npm install -g markdownlint-cli
+
+      - name: "Run bash script"
+        run: cd module3_task2 && ./setup.sh
+
+      - name: "Run make build" # Execute the command make build
+        run: |
+          cd module3_task2
+          make build
+
+      - name: "Linting" # Add the linting step
+        run: |
+          cd module3_task2
+          make lint
+
+      - name: "Testing"
+        run: |
+          cd module3_task2 && make validate
+          make integration-tests
+          make unit-tests
+          make package
+          make clean
+
+      - name: "Archive build"
+        uses: actions/upload-artifact@v3
+        with:
+          name: "upload package"
+          path: module3_task2/awesome-website.zip
