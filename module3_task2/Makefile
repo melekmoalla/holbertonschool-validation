@@ -27,7 +27,7 @@ test:	## Test:
 	go test -v -tags=integration -coverprofile=coverage-integrations.out ## Run both unit tests and integration tests
 
 lint: ## Perform static analysis on the source code
-	##
+	@golangci-lint run
 
 unit-tests: ## Run unit tests
 	@go test -v -short -coverprofile=coverage-units.out
